@@ -1,6 +1,8 @@
 import requests
 import json
 from playsound import playsound
+import os
+
 
 #TODO:- Better error managment
 
@@ -50,6 +52,8 @@ def get_audio_url(id):
 def download_audio(url):
     response = requests.get(url=url)
     name = '.voice.mp3'
+    if os.path.isfile(name):
+        os.remove(name)
     with open(name, 'wb') as f:
         f.write(response.content)
     return name

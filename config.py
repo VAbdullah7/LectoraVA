@@ -14,8 +14,7 @@ def _write_default():
     cp = ConfigParser()
 
     cp['settings'] = {
-        'voice activated': 'yes',
-        'realistic voice': 'yes'
+        'voice activated': 'yes'
         }
 
     with open('configuration.ini', 'w') as f:
@@ -30,7 +29,6 @@ def _read():
 
 def voice_activated():
     _read()
-    realistic_voice = _value['settings']['realistic voice'].lower()
     voice = _value['settings']['voice activated'].lower()
-    return voice == 'yes', voice == 'yes' and realistic_voice == 'yes'
+    return voice == 'yes'
 

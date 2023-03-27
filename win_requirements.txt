@@ -1,0 +1,5 @@
+openai
+rich
+playsound==1.2.2
+requests
+pyaudio

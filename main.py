@@ -1,5 +1,4 @@
 import openai
-import pyttsx3 as tts
 from rich.console import Console
 from rich.prompt import Prompt
 
@@ -7,23 +6,20 @@ import config
 import tts_helper
 
 
+#TODO: - Add speak recognition
+#TODO: - Add GUI
+#TODO: - Hide api keys (it's convenient for the current use)
+#TODO: - Better error managment
+#TODO: - Support arabic voice (text to speech)
+#TODO: - Some cleaning
+
 
 VERSION = 0.5
 
 with open('key.txt', 'r') as f:
         openai.api_key = f.readline()
 
-recognizer = speech_recognition.Recognizer()
-mic = speech_recognition.Microphone(device_index=0)
-
-
-speaker = tts.init()
-voices = speaker.getProperty('voices')
-speaker.setProperty('voice', voices[33].id)
-speaker.setProperty('rate', 150)
-
 console = Console()
-
 config.setup()
 
 def get_api_response(prompt) -> str :
@@ -81,7 +77,6 @@ def print_introduction():
 def main():
     print_introduction()
 
-    
     prompt = [{"role": "system", "content": "You are a helpful assistant. "}]
 
     while True:
@@ -91,29 +86,24 @@ def main():
         print('▬ ▬ ▬ ▬ ▬ ▬ ▬ ')
         print('\n')
         
-        voice_activated, realistic_voice = config.voice_activated()
+        voice_activated = config.voice_activated()
 
         with console.status("[bold green]I'm thinking[/bold green]") as status:
             chat_response: str = get_bot_response(user_input, prompt)
-            if realistic_voice:
+            if voice_activated:
                 tts_response, error = tts_helper.start_text_to_speech(chat_response)
                 if error:
-                    console.print(f'[red][Realistic voice disabled]({error})[/red]')            
-                    realistic_voice = False
+                    console.print(f'[red][Voice disabled]({error})[/red]')            
+                    voice_activated = False
 
         print('▬ ▬ ▬ ▬ ▬ ▬ ▬ ')
         console.print(f'[bold][green]Lectora[/green]: {chat_response}[/bold]')
         print('▬ ▬ ▬ ▬ ▬ ▬ ▬ ')
 
-        if realistic_voice:
+        if voice_activated:
             error = tts_helper.finish_text_to_speech(tts_response)
             if error:
-                console.print(f'[red][Realistic voice disabled]({error})[/red]')
-                realistic_voice = False
-        
-        if voice_activated and not realistic_voice:
-            speaker.say(chat_response)
-            speaker.runAndWait()
+                console.print(f'[red][Voice disabled]({error})[/red]')
 
 
 
