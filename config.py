@@ -14,8 +14,10 @@ def _write_default():
     cp = ConfigParser()
 
     cp['settings'] = {
-        'voice activated': 'yes'
+        'voice activated': 'yes',
+        'prompt': 'You are a helpful assistant. your name is Lectora'
         }
+    
 
     with open('configuration.ini', 'w') as f:
         cp.write(f)
@@ -31,4 +33,7 @@ def voice_activated():
     _read()
     voice = _value['settings']['voice activated'].lower()
     return voice == 'yes'
+
+def prompt():
+    return _value['settings']['prompt']
 

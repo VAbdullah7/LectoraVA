@@ -4,9 +4,6 @@ from playsound import playsound
 import os
 
 
-#TODO:- Better error managment
-
-
 def text_to_speech_full(text):
     id = generate_audio(text)
     url = get_audio_url(id)

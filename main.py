@@ -16,6 +16,8 @@ import tts_helper
 
 VERSION = 0.5
 
+# because github will detect openai's keys in the source code
+# then it will be disabled
 with open('key.txt', 'r') as f:
         openai.api_key = f.readline()
 
@@ -77,7 +79,7 @@ def print_introduction():
 def main():
     print_introduction()
 
-    prompt = [{"role": "system", "content": "You are a helpful assistant. "}]
+    prompt = [{"role": "system", "content": config.prompt()}]
 
     while True:
         print('\n')
